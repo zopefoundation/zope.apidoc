@@ -3,7 +3,7 @@ CHANGES
 =======
 
 
-1.0.0 (unreleased)
+1.0.0 (2013-02-25)
 ------------------
 
 - Initial release independent of ``zope.app.api``.
