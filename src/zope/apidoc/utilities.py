@@ -30,7 +30,7 @@ from zope.security.proxy import isinstance, removeSecurityProxy
 import zope.i18nmessageid
 from zope.container.interfaces import IReadContainer
 
-from zope.apidoc._compat import unicode, MethodType
+from zope.apidoc._compat import unicode, MethodType, PY3
 from zope.apidoc.classregistry import safe_import, IGNORE_MODULES
 
 _ = zope.i18nmessageid.MessageFactory("zope")
@@ -74,7 +74,7 @@ def getPythonPath(obj):
         naked = naked.im_class
         name = naked.__name__
     # Py3 version:
-    if isinstance(naked, types.FunctionType):
+    if PY3 and isinstance(naked, types.FunctionType):
         name = naked.__qualname__.split('.')[0]
     module = getattr(naked, '__module__', _marker)
     if module is _marker:
