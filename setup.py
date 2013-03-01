@@ -26,7 +26,7 @@ def read(*rnames):
 
 setup(
     name = 'zope.apidoc',
-    version = '1.0.0',
+    version = '2.0.0a1',
     author = 'Zope Corporation and Contributors',
     author_email = 'zope-dev@zope.org',
     description = 'API Documentation and Component Inspection for Zope 3',
@@ -58,8 +58,8 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
-        #'Programming Language :: Python :: 3',
-        #'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: Implementation :: CPython',
         'Natural Language :: English',
         'Operating System :: OS Independent',
@@ -71,8 +71,8 @@ setup(
     namespace_packages = ['zope'],
     install_requires = [
         'setuptools',
+        'six',
         'zope.annotation',
-        'zope.app.renderer',
         'zope.browserpage',
         'zope.browserresource',
         'zope.cachedescriptors',
@@ -82,6 +82,7 @@ setup(
         'zope.interface',
         'zope.location',
         'zope.publisher',
+        'zope.renderer',
         'zope.schema',
         'zope.security',
         'zope.traversing',

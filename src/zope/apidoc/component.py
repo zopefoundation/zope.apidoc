@@ -14,6 +14,7 @@
 """Component Inspection Utilities
 """
 import base64
+import six
 import types
 import zope.interface.declarations
 
@@ -29,6 +30,7 @@ from zope.interface import Interface
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces import IRequest
 
+from zope.apidoc._compat import unicode
 from zope.apidoc.classregistry import classRegistry
 from zope.apidoc.utilities import relativizePath, truncateSysPath
 from zope.apidoc.utilities import getPythonPath, isReferencable, renderText
@@ -38,7 +40,7 @@ EXTENDED_INTERFACE_LEVEL = 2
 GENERIC_INTERFACE_LEVEL = 4
 
 def encodeUtilityName(name):
-    return base64.urlsafe_b64encode(name.encode('utf-8'))
+    return base64.urlsafe_b64encode(name.encode('utf-8')).decode()
 
 def _adapterishRegistrations(registry):
     for r in registry.registeredAdapters():
@@ -261,8 +263,7 @@ def getUtilityInfoDictionary(reg):
     # TODO: Once we support passive display of instances, this insanity can go
     #       away.
     if not isinstance(component, (types.MethodType, types.FunctionType,
-                                  types.ClassType, types.TypeType,
-                                  InterfaceClass)):
+                                  InterfaceClass)+six.class_types):
         component = getattr(component, '__class__', component)
 
     path = getPythonPath(component)
