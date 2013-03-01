@@ -13,8 +13,7 @@
 ##############################################################################
 """Views/Presentation Utilities
 """
-from types import ClassType
-
+import six
 from zope.browserresource.icon import IconViewFactory
 from zope.component import getGlobalSiteManager
 from zope.component.registry import AdapterRegistration
@@ -26,6 +25,7 @@ from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.publisher.interfaces.http import IHTTPRequest
 from zope.publisher.interfaces.ftp import IFTPRequest
 
+from zope.apidoc._compat import unicode
 from zope.apidoc.utilities import getPythonPath, relativizePath
 from zope.apidoc.utilities import getPermissionIds
 from zope.apidoc.component import getParserInfoInfoDictionary
@@ -62,7 +62,7 @@ def getViewFactoryData(factory):
         info['template_obj'] = factory.index
 
     # Basic Type is a factory
-    elif isinstance(factory, (str, unicode, float, int, list, tuple)):
+    elif isinstance(factory, (bytes, unicode, float, int, list, tuple)):
         info['referencable'] = False
 
     elif factory.__module__ is not None and \
@@ -91,7 +91,7 @@ def getViewFactoryData(factory):
         info['path'] = getPythonPath(factory.__class__)
 
     # A simple class-based factory
-    elif type(factory) in (type, ClassType):
+    elif isinstance(factory, six.class_types):
         info['path'] = getPythonPath(factory)
 
     # We have tried our best; just get the Python path as good as you can.

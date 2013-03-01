@@ -27,10 +27,10 @@ from zope.security.checker import getCheckerForInstancesOf, Global
 from zope.security.interfaces import INameBasedChecker
 from zope.security.proxy import isinstance, removeSecurityProxy
 
-import zope.app
 import zope.i18nmessageid
 from zope.container.interfaces import IReadContainer
 
+from zope.apidoc._compat import unicode, MethodType, PY3
 from zope.apidoc.classregistry import safe_import, IGNORE_MODULES
 
 _ = zope.i18nmessageid.MessageFactory("zope")
@@ -69,12 +69,17 @@ def getPythonPath(obj):
     # accessed (which is probably not a bad idea). So, we remove the security
     # proxies for this check.
     naked = removeSecurityProxy(obj)
+    name = naked.__name__
     if hasattr(naked, "im_class"):
         naked = naked.im_class
+        name = naked.__name__
+    # Py3 version:
+    if PY3 and isinstance(naked, types.FunctionType):
+        name = naked.__qualname__.split('.')[0]
     module = getattr(naked, '__module__', _marker)
     if module is _marker:
-        return naked.__name__
-    return '%s.%s' %(module, naked.__name__)
+        return name
+    return '%s.%s' %(module, name)
 
 
 def isReferencable(path):
@@ -164,7 +169,7 @@ def getFunctionSignature(func):
     for name, default in zip(args, defaults):
         # Neglect self, since it is always there and not part of the signature.
         # This way the implementation and interface signatures should match.
-        if name == 'self' and type(func) == types.MethodType:
+        if name == 'self' and type(func) == MethodType:
             continue
 
         # Make sure the name is a string
@@ -231,12 +236,12 @@ def getInterfaceForAttribute(name, interfaces=_marker, klass=_marker,
 
 def columnize(entries, columns=3):
     """Place a list of entries into columns."""
-    if len(entries)%columns == 0:
-        per_col = len(entries)/columns
+    if len(entries) % columns == 0:
+        per_col = len(entries) // columns
         last_full_col = columns
     else:
-        per_col = len(entries)/columns + 1
-        last_full_col = len(entries)%columns
+        per_col = len(entries) // columns + 1
+        last_full_col = len(entries) % columns
     columns = []
     col = []
     in_col = 0

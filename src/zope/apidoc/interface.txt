@@ -36,22 +36,20 @@ look at an example.
 First, let's get the methods of an interface:
 
   >>> from zope.interface.interfaces import IMethod
-  >>> interface.getElements(IFoo, type=IMethod).keys()
+  >>> list(interface.getElements(IFoo, type=IMethod).keys())
   ['blah']
 
 and now the fields:
 
   >>> from zope.schema.interfaces import IField
-  >>> names = interface.getElements(IFoo, type=IField).keys()
-  >>> names.sort()
+  >>> names = sorted(interface.getElements(IFoo, type=IField).keys())
   >>> names
   ['bar', 'foo']
 
 We can also get all attributes of course.
 
   >>> from zope.interface.interfaces import IAttribute
-  >>> names = interface.getElements(IFoo, type=IAttribute).keys()
-  >>> names.sort()
+  >>> names = sorted(interface.getElements(IFoo, type=IAttribute).keys())
   >>> names
   ['bar', 'baz', 'blah', 'foo']
 
@@ -64,8 +62,7 @@ attributes that does not include fields and methods, see the
 The default type is `IElement` which will simply return all elements of the
 interface:
 
-  >>> names = interface.getElements(IFoo).keys()
-  >>> names.sort()
+  >>> names = sorted(interface.getElements(IFoo).keys())
   >>> names
   ['bar', 'baz', 'blah', 'foo']
 
@@ -74,7 +71,7 @@ Presentation code often like to wrap interfaces in security proxies and apidoc
 even uses location proxies for interface.
 
 
-`getFieldsInOrder(iface, _itemsorter=...)`
+`getFieldsInOrder(iface, _itemkey=...)`
 -----------------------------------------------------------
 
 For presentation purposes we often want fields to have the a certain order,
@@ -93,7 +90,7 @@ Reusing the interface created above, we check the output:
 By changing the sort method to sort by names, we get:
 
   >>> [n for n, a in interface.getFieldsInOrder(
-  ...       IFoo, _itemsorter=lambda x, y: cmp(x[0], y[0]))]
+  ...       IFoo, _itemkey=lambda x: x[0])]
   ['bar', 'foo']
 
 
@@ -104,8 +101,7 @@ This function returns a (name, attr) tuple for every attribute in the
 interface. Note that this function will only return pure attributes; it
 ignores methods and fields.
 
-  >>> attrs = interface.getAttributes(IFoo)
-  >>> attrs.sort()
+  >>> attrs = sorted(interface.getAttributes(IFoo))
   >>> attrs #doctest: +ELLIPSIS
   [('baz', <zope.interface.interface.Attribute object at ...>)]
 
@@ -116,8 +112,7 @@ ignores methods and fields.
 This function returns a (name, method) tuple for every declared method in the
 interface.
 
-  >>> methods = interface.getMethods(IFoo)
-  >>> methods.sort()
+  >>> methods = sorted(interface.getMethods(IFoo))
   >>> methods #doctest: +ELLIPSIS
   [('blah', <zope.interface.interface.Method object at ...>)]
 
@@ -200,9 +195,10 @@ If the name matching method fails, it picks the first interface that extends
   >>> class ISomething(Interface):
   ...     pass
 
-  >>> from zope.interface import implements
-  >>> class MyField:
-  ...     implements(ISomething, ISpecialField)
+  >>> from zope.interface import implementer
+  >>> @implementer(ISomething, ISpecialField)
+  ... class MyField:
+  ...     pass
 
   >>> interface.getFieldInterface(MyField())
   <InterfaceClass zope.apidoc.doctest.ISpecialField>
