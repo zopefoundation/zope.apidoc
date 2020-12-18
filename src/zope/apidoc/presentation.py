@@ -16,7 +16,7 @@
 import six
 from zope.browserresource.icon import IconViewFactory
 from zope.component import getGlobalSiteManager
-from zope.component.registry import AdapterRegistration
+from zope.interface.registry import AdapterRegistration
 from zope.i18nmessageid import ZopeMessageFactory as _
 from zope.interface import Interface
 from zope.publisher.interfaces import IRequest

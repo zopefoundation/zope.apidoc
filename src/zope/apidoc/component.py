@@ -20,7 +20,7 @@ import zope.interface.declarations
 
 from zope.component import getGlobalSiteManager
 from zope.component.interfaces import IFactory
-from zope.component.registry import (
+from zope.interface.registry import (
     AdapterRegistration,
     HandlerRegistration,
     SubscriptionRegistration,

@@ -38,11 +38,11 @@ _ = zope.i18nmessageid.MessageFactory("zope")
 _remove_html_overhead = re.compile(
     r'(?sm)^<html.*<body.*?>\n(.*)</body>\n</html>\n')
 
-space_re = re.compile('\n^( *)\S', re.M)
+space_re = re.compile(r'\n^( *)\S', re.M)
 
 _marker = object()
 
-BASEDIR = dirname(dirname(dirname(zope.__file__)))
+BASEDIR = dirname(dirname(dirname(dirname(zope.apidoc.__file__))))
 
 def relativizePath(path):
     return path.replace(BASEDIR, 'Zope3')
@@ -198,7 +198,7 @@ def getPublicAttributes(obj):
     for attr in dir(obj):
         if attr.startswith('_'):
             continue
-        
+
         try:
             getattr(obj, attr)
         except AttributeError:
