@@ -21,14 +21,13 @@ import inspect
 from os.path import dirname
 
 from zope.component import createObject, getMultiAdapter
-from zope.interface import implements, implementedBy
+from zope.interface import implementedBy
 from zope.publisher.browser import TestRequest
 from zope.security.checker import getCheckerForInstancesOf, Global
 from zope.security.interfaces import INameBasedChecker
 from zope.security.proxy import isinstance, removeSecurityProxy
 
 import zope.i18nmessageid
-from zope.container.interfaces import IReadContainer
 
 from zope.apidoc._compat import unicode, MethodType, PY3
 from zope.apidoc.classregistry import safe_import, IGNORE_MODULES
@@ -43,6 +42,7 @@ space_re = re.compile(r'\n^( *)\S', re.M)
 _marker = object()
 
 BASEDIR = dirname(dirname(dirname(dirname(zope.apidoc.__file__))))
+
 
 def relativizePath(path):
     return path.replace(BASEDIR, 'Zope3')
@@ -79,7 +79,7 @@ def getPythonPath(obj):
     module = getattr(naked, '__module__', _marker)
     if module is _marker:
         return name
-    return '%s.%s' %(module, name)
+    return '%s.%s' % (module, name)
 
 
 def isReferencable(path):
@@ -102,7 +102,7 @@ def isReferencable(path):
     # Do not allow private attributes to be accessible
     if (obj_name is not None and
         obj_name.startswith('_') and
-        not (obj_name.startswith('__') and obj_name.endswith('__'))):
+            not (obj_name.startswith('__') and obj_name.endswith('__'))):
         return False
     module = safe_import(module_name)
     if module is None:
@@ -140,9 +140,9 @@ def getPermissionIds(name, checker=_marker, klass=_marker):
 
     if checker is not None and INameBasedChecker.providedBy(checker):
         entry['read_perm'] = _evalId(checker.permission_id(name)) \
-                             or _('n/a')
+            or _('n/a')
         entry['write_perm'] = _evalId(checker.setattr_permission_id(name)) \
-                              or _('n/a')
+            or _('n/a')
     else:
         entry['read_perm'] = entry['write_perm'] = None
 
@@ -208,6 +208,7 @@ def getPublicAttributes(obj):
 
     return attrs
 
+
 def getInterfaceForAttribute(name, interfaces=_marker, klass=_marker,
                              asPath=True):
     """Determine the interface in which an attribute is defined."""
@@ -262,7 +263,8 @@ _format_dict = {
     'plaintext': 'zope.source.plaintext',
     'structuredtext': 'zope.source.stx',
     'restructuredtext': 'zope.source.rest'
-    }
+}
+
 
 def getDocFormat(module):
     """Convert a module's __docformat__ specification to a renderer source

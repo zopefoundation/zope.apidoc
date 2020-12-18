@@ -18,11 +18,8 @@ import sys
 PY3 = sys.version_info[0] >= 3
 
 if PY3:
-
     unicode = str
     from types import FunctionType as MethodType
-
 else:
-
     unicode = unicode
-    from types import MethodType
+    from types import MethodType  # noqa: F401 import unused

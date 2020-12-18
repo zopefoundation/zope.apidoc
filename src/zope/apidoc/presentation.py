@@ -16,7 +16,6 @@
 import six
 from zope.browserresource.icon import IconViewFactory
 from zope.component import getGlobalSiteManager
-from zope.interface.registry import AdapterRegistration
 from zope.i18nmessageid import ZopeMessageFactory as _
 from zope.interface import Interface
 from zope.publisher.interfaces import IRequest
@@ -39,6 +38,7 @@ GENERIC_INTERFACE_LEVEL = 4
 BROWSER_DIRECTIVES_MODULE = 'zope.browserpage.viewmeta'
 XMLRPC_DIRECTIVES_MODULE = 'zope.app.publisher.xmlrpc.metaconfigure'
 JSONRPC_DIRECTIVES_MODULE = 'jsonserver.metaconfigure'
+
 
 def getViewFactoryData(factory):
     """Squeeze some useful information out of the view factory"""
@@ -66,12 +66,12 @@ def getViewFactoryData(factory):
         info['referencable'] = False
 
     elif factory.__module__ is not None and \
-             factory.__module__.startswith(BROWSER_DIRECTIVES_MODULE):
+            factory.__module__.startswith(BROWSER_DIRECTIVES_MODULE):
         info['path'] = getPythonPath(factory.__bases__[0])
 
     # XML-RPC view factory, generated during registration
     elif factory.__module__ is not None and \
-             factory.__module__.startswith(XMLRPC_DIRECTIVES_MODULE):
+            factory.__module__.startswith(XMLRPC_DIRECTIVES_MODULE):
 
         # Those factories are method publisher and security wrapped
         info['path'] = getPythonPath(factory.__bases__[0].__bases__[0])
@@ -80,7 +80,7 @@ def getViewFactoryData(factory):
     # This is needed for the 3rd party jsonserver implementation
     # TODO: See issue http://www.zope.org/Collectors/Zope3-dev/504, ri
     elif factory.__module__ is not None and \
-             factory.__module__.startswith(JSONRPC_DIRECTIVES_MODULE):
+            factory.__module__.startswith(JSONRPC_DIRECTIVES_MODULE):
 
         # Those factories are method publisher and security wrapped
         info['path'] = getPythonPath(factory.__bases__[0].__bases__[0])
@@ -124,7 +124,7 @@ def getViews(iface, type=IRequest):
     for reg in gsm.registeredAdapters():
         if (len(reg.required) > 0 and
             reg.required[-1] is not None and
-            reg.required[-1].isOrExtends(type)):
+                reg.required[-1].isOrExtends(type)):
 
             for required_iface in reg.required[:-1]:
                 if required_iface is None or iface.isOrExtends(required_iface):
@@ -143,7 +143,7 @@ def filterViewRegistrations(regs, iface, level=SPECIFIC_INTERFACE_LEVEL):
         if level & EXTENDED_INTERFACE_LEVEL:
             for required_iface in reg.required[:-1]:
                 if required_iface is not Interface and \
-                       iface.extends(required_iface):
+                        iface.extends(required_iface):
                     yield reg
                     continue
 
@@ -164,12 +164,12 @@ def getViewInfoDictionary(reg):
         doc = None
         zcml = getParserInfoInfoDictionary(reg.info)
 
-    info = {'name' : unicode(reg.name) or _('<i>no name</i>'),
-            'type' : getPythonPath(getPresentationType(reg.required[-1])),
-            'factory' : getViewFactoryData(reg.factory),
+    info = {'name': unicode(reg.name) or _('<i>no name</i>'),
+            'type': getPythonPath(getPresentationType(reg.required[-1])),
+            'factory': getViewFactoryData(reg.factory),
             'required': [getInterfaceInfoDictionary(iface)
                          for iface in reg.required],
-            'provided' : getInterfaceInfoDictionary(reg.provided),
+            'provided': getInterfaceInfoDictionary(reg.provided),
             'doc': doc,
             'zcml': zcml
             }
