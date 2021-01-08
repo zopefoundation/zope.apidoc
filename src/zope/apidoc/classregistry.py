@@ -13,13 +13,14 @@
 ##############################################################################
 """Class Registry
 """
+import sys
+from zope.testing.cleanup import addCleanUp
 __import_unknown_modules__ = False
 
 # List of modules that should never be imported.
 # TODO: List hard-coded for now.
 IGNORE_MODULES = ['twisted']
 
-import sys
 
 class ClassRegistry(dict):
     """A simple registry for classes."""
@@ -43,10 +44,11 @@ class ClassRegistry(dict):
 
 classRegistry = ClassRegistry()
 
+
 def cleanUp():
     classRegistry.clear()
 
-from zope.testing.cleanup import addCleanUp
+
 addCleanUp(cleanUp)
 
 
@@ -63,6 +65,6 @@ def safe_import(path, default=None):
             return default
         # Some software, we cannot control, might raise all sorts of errors;
         # thus catch all exceptions and return the default.
-        except Exception as error:
+        except Exception:
             return default
     return module

@@ -21,13 +21,9 @@ import zope.testing.module
 
 import zope.component.testing
 from zope.component.interfaces import IFactory
-from zope.interface import implements, Interface
-from zope.location import LocationProxy
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.traversing.interfaces import IContainmentRoot
+from zope.interface import Interface
 
 from zope.renderer.rest import ReStructuredTextSourceFactory
-from zope.renderer.rest import IReStructuredTextSource
 from zope.renderer.rest import ReStructuredTextToHTMLRenderer
 
 from zope.testing import renormalizing
@@ -41,7 +37,7 @@ checker = renormalizing.RENormalizing([
     # Python 3 renamed the builtins dict.
     (re.compile('__builtin__'),
      r"builtins"),
-    ])
+])
 
 
 def setUp(test):
@@ -67,22 +63,22 @@ def tearDown(test):
 def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
-                'classregistry.txt',
-                optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            'classregistry.txt',
+            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
         doctest.DocFileSuite(
-                'interface.txt',
-                setUp=setUp, tearDown=tearDown,
-                optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            'interface.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
         doctest.DocFileSuite(
-                'component.txt',
-                setUp=setUp, tearDown=tearDown,
-                optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            'component.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
         doctest.DocFileSuite(
-                'presentation.txt',
-                setUp=setUp, tearDown=tearDown,
-                optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            'presentation.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
         doctest.DocFileSuite(
-                'utilities.txt',
-                setUp=setUp, tearDown=tearDown,
-                optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
-        ))
+            'utilities.txt',
+            setUp=setUp, tearDown=tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+    ))

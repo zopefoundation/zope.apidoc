@@ -20,11 +20,6 @@ import zope.interface.declarations
 
 from zope.component import getGlobalSiteManager
 from zope.component.interfaces import IFactory
-from zope.component.registry import (
-    AdapterRegistration,
-    HandlerRegistration,
-    SubscriptionRegistration,
-    UtilityRegistration)
 from zope.i18nmessageid import ZopeMessageFactory as _
 from zope.interface import Interface
 from zope.interface.interface import InterfaceClass
@@ -39,8 +34,10 @@ SPECIFIC_INTERFACE_LEVEL = 1
 EXTENDED_INTERFACE_LEVEL = 2
 GENERIC_INTERFACE_LEVEL = 4
 
+
 def encodeUtilityName(name):
     return base64.urlsafe_b64encode(name.encode('utf-8')).decode()
+
 
 def _adapterishRegistrations(registry):
     for r in registry.registeredAdapters():
@@ -77,7 +74,7 @@ def getProvidedAdapters(iface, withViews=False):
             continue
         # Ignore views
         if not withViews and reg.required[-1] and \
-               reg.required[-1].isOrExtends(IRequest):
+                reg.required[-1].isOrExtends(IRequest):
             continue
         # Only get adapters for which this interface is provided
         if reg.provided is None or not reg.provided.isOrExtends(iface):
@@ -97,7 +94,7 @@ def filterAdapterRegistrations(regs, iface, level=SPECIFIC_INTERFACE_LEVEL):
         if level & EXTENDED_INTERFACE_LEVEL:
             for required_iface in reg.required:
                 if required_iface is not Interface and \
-                       iface.extends(required_iface):
+                        iface.extends(required_iface):
                     yield reg
                     continue
 
@@ -164,16 +161,6 @@ def getParserInfoInfoDictionary(info):
             'eline': info.eline,
             'column': info.column,
             'ecolumn': info.ecolumn}
-
-
-def getInterfaceInfoDictionary(iface):
-    """Return a PT-friendly info dictionary for an interface."""
-    if isinstance(iface, zope.interface.declarations.Implements):
-        iface = iface.inherit
-    if iface is None:
-        return None
-    return {'module': getattr(iface, '__module__', _('<unknown>')),
-            'name': getattr(iface, '__name__', _('<unknown>'))}
 
 
 def getInterfaceInfoDictionary(iface):

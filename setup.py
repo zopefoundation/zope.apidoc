@@ -21,15 +21,17 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
+
 setup(
-    name = 'zope.apidoc',
-    version='2.0.0a2.dev0',
-    author = 'Zope Corporation and Contributors',
-    author_email = 'zope-dev@zope.org',
-    description = 'API Documentation and Component Inspection for Zope 3',
+    name='zope.apidoc',
+    version='2.0.0dev0',
+    author='Zope Foundation and Contributors',
+    author_email='zope-dev@zope.org',
+    description='API Documentation and Component Inspection for Zope 3',
     long_description=(
         read('README.txt')
         + '\n\n.. contents::\n\n' +
@@ -46,30 +48,33 @@ setup(
         read('src', 'zope', 'apidoc', 'classregistry.txt')
         + '\n\n' +
         read('CHANGES.txt')
-        ),
-    license = "ZPL 2.1",
-    keywords = "zope3 api documentation",
-    classifiers = [
+    ),
+    license="ZPL 2.1",
+    keywords="zope3 api documentation",
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Zope Public License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: Implementation :: CPython',
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Zope :: 3'],
-    url = 'http://pypi.python.org/pypi/zope.apidoc',
-    packages = find_packages('src'),
-    package_dir = {'':'src'},
-    namespace_packages = ['zope'],
-    install_requires = [
+    url='https://github.com/zopefoundation/zope.apidoc',
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    namespace_packages=['zope'],
+    install_requires=[
         'setuptools',
         'six',
         'zope.annotation',
@@ -86,14 +91,14 @@ setup(
         'zope.schema',
         'zope.security',
         'zope.traversing',
-        ],
-      extras_require = dict(
-          test=[
+    ],
+    extras_require=dict(
+        test=[
             'zope.testing',
-            ],
-          ),
-    include_package_data = True,
+        ],
+    ),
+    include_package_data=True,
     tests_require=['zope.testing'],
     test_suite='zope.apidoc.tests.test_suite',
-    zip_safe = False,
-    )
+    zip_safe=False,
+)
