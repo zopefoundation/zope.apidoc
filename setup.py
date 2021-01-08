@@ -70,7 +70,7 @@ setup(
         'Operating System :: OS Independent',
         'Topic :: Internet :: WWW/HTTP',
         'Framework :: Zope :: 3'],
-    url='http://pypi.python.org/pypi/zope.apidoc',
+    url='https://github.com/zopefoundation/zope.apidoc',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['zope'],

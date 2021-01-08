@@ -13,8 +13,8 @@
 ##############################################################################
 """Class Registry
 """
-from zope.testing.cleanup import addCleanUp
 import sys
+from zope.testing.cleanup import addCleanUp
 __import_unknown_modules__ = False
 
 # List of modules that should never be imported.
