@@ -123,7 +123,7 @@ def getViews(iface, type=IRequest):
     gsm = getGlobalSiteManager()
     for reg in gsm.registeredAdapters():
         if (len(reg.required) > 0 and
-            reg.required[-1] is not None and
+                reg.required[-1] is not None and
                 reg.required[-1].isOrExtends(type)):
 
             for required_iface in reg.required[:-1]:

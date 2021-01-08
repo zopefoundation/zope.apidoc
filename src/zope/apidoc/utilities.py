@@ -101,7 +101,7 @@ def isReferencable(path):
 
     # Do not allow private attributes to be accessible
     if (obj_name is not None and
-        obj_name.startswith('_') and
+            obj_name.startswith('_') and
             not (obj_name.startswith('__') and obj_name.endswith('__'))):
         return False
     module = safe_import(module_name)
