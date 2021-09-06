@@ -95,6 +95,7 @@ setup(
     extras_require=dict(
         test=[
             'zope.testing',
+            'zope.testrunner',
         ],
     ),
     include_package_data=True,
