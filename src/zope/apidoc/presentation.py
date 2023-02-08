@@ -14,21 +14,22 @@
 """Views/Presentation Utilities
 """
 import six
+
+from zope.apidoc._compat import unicode
+from zope.apidoc.component import getInterfaceInfoDictionary
+from zope.apidoc.component import getParserInfoInfoDictionary
+from zope.apidoc.utilities import getPermissionIds
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import relativizePath
 from zope.browserresource.icon import IconViewFactory
 from zope.component import getGlobalSiteManager
 from zope.i18nmessageid import ZopeMessageFactory as _
 from zope.interface import Interface
 from zope.publisher.interfaces import IRequest
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
-from zope.publisher.interfaces.http import IHTTPRequest
 from zope.publisher.interfaces.ftp import IFTPRequest
-
-from zope.apidoc._compat import unicode
-from zope.apidoc.utilities import getPythonPath, relativizePath
-from zope.apidoc.utilities import getPermissionIds
-from zope.apidoc.component import getParserInfoInfoDictionary
-from zope.apidoc.component import getInterfaceInfoDictionary
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 
 SPECIFIC_INTERFACE_LEVEL = 1

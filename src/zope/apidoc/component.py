@@ -14,10 +14,18 @@
 """Component Inspection Utilities
 """
 import base64
-import six
 import types
-import zope.interface.declarations
 
+import six
+
+import zope.interface.declarations
+from zope.apidoc._compat import unicode
+from zope.apidoc.classregistry import classRegistry
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import isReferencable
+from zope.apidoc.utilities import relativizePath
+from zope.apidoc.utilities import renderText
+from zope.apidoc.utilities import truncateSysPath
 from zope.component import getGlobalSiteManager
 from zope.component.interfaces import IFactory
 from zope.i18nmessageid import ZopeMessageFactory as _
@@ -25,10 +33,6 @@ from zope.interface import Interface
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces import IRequest
 
-from zope.apidoc._compat import unicode
-from zope.apidoc.classregistry import classRegistry
-from zope.apidoc.utilities import relativizePath, truncateSysPath
-from zope.apidoc.utilities import getPythonPath, isReferencable, renderText
 
 SPECIFIC_INTERFACE_LEVEL = 1
 EXTENDED_INTERFACE_LEVEL = 2

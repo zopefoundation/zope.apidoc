@@ -16,17 +16,16 @@
 import doctest
 import re
 import unittest
-import zope.component
-import zope.testing.module
 
+import zope.component
 import zope.component.testing
+import zope.testing.module
 from zope.component.interfaces import IFactory
 from zope.interface import Interface
-
 from zope.renderer.rest import ReStructuredTextSourceFactory
 from zope.renderer.rest import ReStructuredTextToHTMLRenderer
-
 from zope.testing import renormalizing
+
 
 checker = renormalizing.RENormalizing([
     # Python 3 unicode removed the "u".

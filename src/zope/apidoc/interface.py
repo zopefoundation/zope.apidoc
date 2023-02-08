@@ -15,12 +15,17 @@
 """
 import inspect
 
-from zope.interface import Interface, providedBy
-from zope.interface.interfaces import IInterface, ISpecification
-from zope.interface.interfaces import IElement, IAttribute, IMethod
+from zope.apidoc.utilities import getDocFormat
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import renderText
+from zope.interface import Interface
+from zope.interface import providedBy
+from zope.interface.interfaces import IAttribute
+from zope.interface.interfaces import IElement
+from zope.interface.interfaces import IInterface
+from zope.interface.interfaces import IMethod
+from zope.interface.interfaces import ISpecification
 from zope.schema.interfaces import IField
-
-from zope.apidoc.utilities import getPythonPath, renderText, getDocFormat
 
 
 def getElements(iface, type=IElement):
