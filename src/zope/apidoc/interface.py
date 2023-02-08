@@ -15,9 +15,6 @@
 """
 import inspect
 
-from zope.apidoc.utilities import getDocFormat
-from zope.apidoc.utilities import getPythonPath
-from zope.apidoc.utilities import renderText
 from zope.interface import Interface
 from zope.interface import providedBy
 from zope.interface.interfaces import IAttribute
@@ -26,6 +23,10 @@ from zope.interface.interfaces import IInterface
 from zope.interface.interfaces import IMethod
 from zope.interface.interfaces import ISpecification
 from zope.schema.interfaces import IField
+
+from zope.apidoc.utilities import getDocFormat
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import renderText
 
 
 def getElements(iface, type=IElement):
@@ -107,7 +108,7 @@ def getAttributeInfoDictionary(attr, format=None):
     """Return a page-template-friendly information dictionary."""
     format = format or _getDocFormat(attr)
     return {'name': attr.getName(),
-            'doc': renderText(attr.getDoc() or u'', format=format)}
+            'doc': renderText(attr.getDoc() or '', format=format)}
 
 
 def getMethodInfoDictionary(method, format=None):
@@ -115,7 +116,7 @@ def getMethodInfoDictionary(method, format=None):
     format = format or _getDocFormat(method)
     return {'name': method.getName(),
             'signature': method.getSignatureString(),
-            'doc': renderText(method.getDoc() or u'', format=format)}
+            'doc': renderText(method.getDoc() or '', format=format)}
 
 
 def getFieldInfoDictionary(field, format=None):
@@ -124,7 +125,7 @@ def getFieldInfoDictionary(field, format=None):
 
     info = {'name': field.getName(),
             'required': field.required,
-            'required_string': field.required and u'required' or u'optional',
+            'required_string': field.required and 'required' or 'optional',
             'default': repr(field.default),
             'title': field.title}
 
@@ -138,6 +139,6 @@ def getFieldInfoDictionary(field, format=None):
                      'path': getPythonPath(class_).replace('.', '/')}
 
     # Render the field description
-    info['description'] = renderText(field.description or u'', format=format)
+    info['description'] = renderText(field.description or '', format=format)
 
     return info

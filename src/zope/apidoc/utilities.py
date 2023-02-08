@@ -21,10 +21,6 @@ import types
 from os.path import dirname
 
 import zope.i18nmessageid
-from zope.apidoc._compat import PY3
-from zope.apidoc._compat import unicode
-from zope.apidoc.classregistry import IGNORE_MODULES
-from zope.apidoc.classregistry import safe_import
 from zope.component import createObject
 from zope.component import getMultiAdapter
 from zope.interface import implementedBy
@@ -34,6 +30,9 @@ from zope.security.checker import getCheckerForInstancesOf
 from zope.security.interfaces import INameBasedChecker
 from zope.security.proxy import isinstance
 from zope.security.proxy import removeSecurityProxy
+
+from zope.apidoc.classregistry import IGNORE_MODULES
+from zope.apidoc.classregistry import safe_import
 
 
 _ = zope.i18nmessageid.MessageFactory("zope")
@@ -77,13 +76,12 @@ def getPythonPath(obj):
     if hasattr(naked, "im_class"):
         naked = naked.im_class
         name = naked.__name__
-    # Py3 version:
-    if PY3 and isinstance(naked, types.FunctionType):
+    if isinstance(naked, types.FunctionType):
         name = naked.__qualname__.split('.')[0]
     module = getattr(naked, '__module__', _marker)
     if module is _marker:
         return name
-    return '%s.%s' % (module, name)
+    return '{}.{}'.format(module, name)
 
 
 def isReferencable(path):
@@ -253,10 +251,10 @@ def dedentString(text):
 
 def renderText(text, module=None, format=None, dedent=True):
     if not text:
-        return u''
+        return ''
 
     if module is not None:
-        if isinstance(module, (str, unicode)):
+        if isinstance(module, str):
             module = sys.modules.get(module, None)
         if format is None:
             format = getDocFormat(module)
@@ -268,7 +266,7 @@ def renderText(text, module=None, format=None, dedent=True):
 
     text = dedentString(text)
 
-    if not isinstance(text, unicode):
+    if not isinstance(text, str):
         text = text.decode('latin-1', 'replace')
     source = createObject(format, text)
 
