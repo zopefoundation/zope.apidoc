@@ -14,10 +14,9 @@
 """Component Inspection Utilities
 """
 import base64
-import six
 import types
-import zope.interface.declarations
 
+import zope.interface.declarations
 from zope.component import getGlobalSiteManager
 from zope.component.interfaces import IFactory
 from zope.i18nmessageid import ZopeMessageFactory as _
@@ -25,10 +24,13 @@ from zope.interface import Interface
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces import IRequest
 
-from zope.apidoc._compat import unicode
 from zope.apidoc.classregistry import classRegistry
-from zope.apidoc.utilities import relativizePath, truncateSysPath
-from zope.apidoc.utilities import getPythonPath, isReferencable, renderText
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import isReferencable
+from zope.apidoc.utilities import relativizePath
+from zope.apidoc.utilities import renderText
+from zope.apidoc.utilities import truncateSysPath
+
 
 SPECIFIC_INTERFACE_LEVEL = 1
 EXTENDED_INTERFACE_LEVEL = 2
@@ -40,12 +42,9 @@ def encodeUtilityName(name):
 
 
 def _adapterishRegistrations(registry):
-    for r in registry.registeredAdapters():
-        yield r
-    for r in registry.registeredSubscriptionAdapters():
-        yield r
-    for r in registry.registeredHandlers():
-        yield r
+    yield from registry.registeredAdapters()
+    yield from registry.registeredSubscriptionAdapters()
+    yield from registry.registeredHandlers()
 
 
 def getRequiredAdapters(iface, withViews=False):
@@ -202,7 +201,7 @@ def getAdapterInfoDictionary(reg):
     if isReferencable(path):
         url = path.replace('.', '/')
 
-    if isinstance(reg.info, (str, unicode)):
+    if isinstance(reg.info, str):
         doc = reg.info
         zcml = None
     else:
@@ -214,7 +213,7 @@ def getAdapterInfoDictionary(reg):
         'required': [getSpecificationInfoDictionary(iface)
                      for iface in reg.required
                      if iface is not None],
-        'name': unicode(getattr(reg, 'name', u'')),
+        'name': str(getattr(reg, 'name', '')),
         'factory': path,
         'factory_url': url,
         'doc': doc,
@@ -234,9 +233,9 @@ def getFactoryInfoDictionary(reg):
 
     path = getPythonPath(callable)
 
-    return {'name': unicode(reg.name) or _('<i>no name</i>'),
-            'title': getattr(factory, 'title', u''),
-            'description': renderText(getattr(factory, 'description', u''),
+    return {'name': str(reg.name) or _('<i>no name</i>'),
+            'title': getattr(factory, 'title', ''),
+            'description': renderText(getattr(factory, 'description', ''),
                                       module=callable.__module__),
             'url': isReferencable(path) and path.replace('.', '/') or None}
 
@@ -250,13 +249,13 @@ def getUtilityInfoDictionary(reg):
     # TODO: Once we support passive display of instances, this insanity can go
     #       away.
     if not isinstance(component, (types.MethodType, types.FunctionType,
-                                  InterfaceClass)+six.class_types):
+                                  InterfaceClass)+(type,)):
         component = getattr(component, '__class__', component)
 
     path = getPythonPath(component)
 
     # provided interface id
-    iface_id = '%s.%s' % (reg.provided.__module__, reg.provided.getName())
+    iface_id = '{}.{}'.format(reg.provided.__module__, reg.provided.getName())
 
     # Determine the URL
     if isinstance(component, InterfaceClass):
@@ -266,7 +265,7 @@ def getUtilityInfoDictionary(reg):
         if isReferencable(path):
             url = 'Code/%s' % path.replace('.', '/')
 
-    return {'name': unicode(reg.name) or _('<i>no name</i>'),
+    return {'name': str(reg.name) or _('<i>no name</i>'),
             'url_name': encodeUtilityName(reg.name or '__noname__'),
             'iface_id': iface_id,
             'path': path,

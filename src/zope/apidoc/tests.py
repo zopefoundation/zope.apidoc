@@ -14,30 +14,15 @@
 """Tests for the Interface Documentation Module
 """
 import doctest
-import re
 import unittest
-import zope.component
-import zope.testing.module
 
+import zope.component
 import zope.component.testing
+import zope.testing.module
 from zope.component.interfaces import IFactory
 from zope.interface import Interface
-
 from zope.renderer.rest import ReStructuredTextSourceFactory
 from zope.renderer.rest import ReStructuredTextToHTMLRenderer
-
-from zope.testing import renormalizing
-
-checker = renormalizing.RENormalizing([
-    # Python 3 unicode removed the "u".
-    (re.compile("u('.*?')"),
-     r"\1"),
-    (re.compile('u(".*?")'),
-     r"\1"),
-    # Python 3 renamed the builtins dict.
-    (re.compile('__builtin__'),
-     r"builtins"),
-])
 
 
 def setUp(test):
@@ -64,21 +49,21 @@ def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'classregistry.txt',
-            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            optionflags=doctest.NORMALIZE_WHITESPACE),
         doctest.DocFileSuite(
             'interface.txt',
             setUp=setUp, tearDown=tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            optionflags=doctest.NORMALIZE_WHITESPACE),
         doctest.DocFileSuite(
             'component.txt',
             setUp=setUp, tearDown=tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            optionflags=doctest.NORMALIZE_WHITESPACE),
         doctest.DocFileSuite(
             'presentation.txt',
             setUp=setUp, tearDown=tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            optionflags=doctest.NORMALIZE_WHITESPACE),
         doctest.DocFileSuite(
             'utilities.txt',
             setUp=setUp, tearDown=tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE, checker=checker),
+            optionflags=doctest.NORMALIZE_WHITESPACE),
     ))

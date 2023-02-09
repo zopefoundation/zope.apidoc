@@ -14,23 +14,26 @@
 """Utilties to make the life of Documentation Modules easier.
 """
 __docformat__ = 'restructuredtext'
+import inspect
 import re
 import sys
 import types
-import inspect
 from os.path import dirname
 
-from zope.component import createObject, getMultiAdapter
+import zope.i18nmessageid
+from zope.component import createObject
+from zope.component import getMultiAdapter
 from zope.interface import implementedBy
 from zope.publisher.browser import TestRequest
-from zope.security.checker import getCheckerForInstancesOf, Global
+from zope.security.checker import Global
+from zope.security.checker import getCheckerForInstancesOf
 from zope.security.interfaces import INameBasedChecker
-from zope.security.proxy import isinstance, removeSecurityProxy
+from zope.security.proxy import isinstance
+from zope.security.proxy import removeSecurityProxy
 
-import zope.i18nmessageid
+from zope.apidoc.classregistry import IGNORE_MODULES
+from zope.apidoc.classregistry import safe_import
 
-from zope.apidoc._compat import unicode, MethodType, PY3
-from zope.apidoc.classregistry import safe_import, IGNORE_MODULES
 
 _ = zope.i18nmessageid.MessageFactory("zope")
 
@@ -73,13 +76,12 @@ def getPythonPath(obj):
     if hasattr(naked, "im_class"):
         naked = naked.im_class
         name = naked.__name__
-    # Py3 version:
-    if PY3 and isinstance(naked, types.FunctionType):
+    if isinstance(naked, types.FunctionType):
         name = naked.__qualname__.split('.')[0]
     module = getattr(naked, '__module__', _marker)
     if module is _marker:
         return name
-    return '%s.%s' % (module, name)
+    return '{}.{}'.format(module, name)
 
 
 def isReferencable(path):
@@ -153,43 +155,9 @@ def getFunctionSignature(func):
     """Return the signature of a function or method."""
     if not isinstance(func, (types.FunctionType, types.MethodType)):
         raise TypeError("func must be a function or method")
-
-    args, varargs, varkw, defaults = inspect.getargspec(func)
-    placeholder = object()
-    sig = '('
-    # By filling up the default tuple, we now have equal indeces for args and
-    # default.
-    if defaults is not None:
-        defaults = (placeholder,)*(len(args)-len(defaults)) + defaults
-    else:
-        defaults = (placeholder,)*len(args)
-
-    str_args = []
-
-    for name, default in zip(args, defaults):
-        # Neglect self, since it is always there and not part of the signature.
-        # This way the implementation and interface signatures should match.
-        if name == 'self' and type(func) == MethodType:
-            continue
-
-        # Make sure the name is a string
-        if isinstance(name, (tuple, list)):
-            name = '(' + ', '.join(name) + ')'
-        elif not isinstance(name, str):
-            name = repr(name)
-
-        if default is placeholder:
-            str_args.append(name)
-        else:
-            str_args.append(name + '=' + repr(default))
-
-    if varargs:
-        str_args.append('*'+varargs)
-    if varkw:
-        str_args.append('**'+varkw)
-
-    sig += ', '.join(str_args)
-    return sig + ')'
+    result = str(inspect.signature(func))
+    result = result.replace("(self)", "()").replace("(self, ", '(')
+    return result
 
 
 def getPublicAttributes(obj):
@@ -283,10 +251,10 @@ def dedentString(text):
 
 def renderText(text, module=None, format=None, dedent=True):
     if not text:
-        return u''
+        return ''
 
     if module is not None:
-        if isinstance(module, (str, unicode)):
+        if isinstance(module, str):
             module = sys.modules.get(module, None)
         if format is None:
             format = getDocFormat(module)
@@ -298,7 +266,7 @@ def renderText(text, module=None, format=None, dedent=True):
 
     text = dedentString(text)
 
-    if not isinstance(text, unicode):
+    if not isinstance(text, str):
         text = text.decode('latin-1', 'replace')
     source = createObject(format, text)
 

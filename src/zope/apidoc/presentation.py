@@ -13,22 +13,21 @@
 ##############################################################################
 """Views/Presentation Utilities
 """
-import six
 from zope.browserresource.icon import IconViewFactory
 from zope.component import getGlobalSiteManager
 from zope.i18nmessageid import ZopeMessageFactory as _
 from zope.interface import Interface
 from zope.publisher.interfaces import IRequest
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
-from zope.publisher.interfaces.http import IHTTPRequest
 from zope.publisher.interfaces.ftp import IFTPRequest
+from zope.publisher.interfaces.http import IHTTPRequest
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
-from zope.apidoc._compat import unicode
-from zope.apidoc.utilities import getPythonPath, relativizePath
-from zope.apidoc.utilities import getPermissionIds
-from zope.apidoc.component import getParserInfoInfoDictionary
 from zope.apidoc.component import getInterfaceInfoDictionary
+from zope.apidoc.component import getParserInfoInfoDictionary
+from zope.apidoc.utilities import getPermissionIds
+from zope.apidoc.utilities import getPythonPath
+from zope.apidoc.utilities import relativizePath
 
 
 SPECIFIC_INTERFACE_LEVEL = 1
@@ -62,7 +61,7 @@ def getViewFactoryData(factory):
         info['template_obj'] = factory.index
 
     # Basic Type is a factory
-    elif isinstance(factory, (bytes, unicode, float, int, list, tuple)):
+    elif isinstance(factory, (bytes, str, float, int, list, tuple)):
         info['referencable'] = False
 
     elif factory.__module__ is not None and \
@@ -91,7 +90,7 @@ def getViewFactoryData(factory):
         info['path'] = getPythonPath(factory.__class__)
 
     # A simple class-based factory
-    elif isinstance(factory, six.class_types):
+    elif isinstance(factory, type):
         info['path'] = getPythonPath(factory)
 
     # We have tried our best; just get the Python path as good as you can.
@@ -157,14 +156,14 @@ def filterViewRegistrations(regs, iface, level=SPECIFIC_INTERFACE_LEVEL):
 def getViewInfoDictionary(reg):
     """Build up an information dictionary for a view registration."""
     # get configuration info
-    if isinstance(reg.info, (str, unicode)):
+    if isinstance(reg.info, str):
         doc = reg.info
         zcml = None
     else:
         doc = None
         zcml = getParserInfoInfoDictionary(reg.info)
 
-    info = {'name': unicode(reg.name) or _('<i>no name</i>'),
+    info = {'name': str(reg.name) or _('<i>no name</i>'),
             'type': getPythonPath(getPresentationType(reg.required[-1])),
             'factory': getViewFactoryData(reg.factory),
             'required': [getInterfaceInfoDictionary(iface)
